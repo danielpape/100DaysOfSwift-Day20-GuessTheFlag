@@ -14,10 +14,15 @@ struct ContentView: View {
     
     @State private var showingScore = false
     @State private var scoreTitle = ""
+    @State private var scoreMessage = ""
+    
+    @State private var score = 0
+    @State private var flagsAsked = 0
     
     
     var body: some View {
-        ZStack {
+        NavigationView{
+            ZStack {
             LinearGradient(gradient: Gradient(colors:[Color.blue,Color.black]), startPoint: .top, endPoint: .bottom).edgesIgnoringSafeArea(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
             VStack(spacing: 30){
                 VStack{
@@ -44,17 +49,23 @@ struct ContentView: View {
                 Spacer()
             }
             .alert(isPresented: $showingScore){
-                Alert(title: Text(scoreTitle), message: Text("Your score is x out of x"), dismissButton: .default(Text("OK"), action: askQuestion))
+                Alert(title: Text(scoreTitle), message: Text(scoreMessage), dismissButton: .default(Text("OK"), action: askQuestion))
             }
         }
-        
+            .navigationBarItems(trailing: Text("Score: \(score)").foregroundColor(.white))
+        }
     }
     
     func flagTapped(_ number:Int){
+        flagsAsked += 1
         if(number == correctAnswer){
+            score += 1
             scoreTitle = "That's right!"
+            scoreMessage = "Your score is \(score) out of \(flagsAsked)"
+ 
         } else {
             scoreTitle = "Incorrect!"
+            scoreMessage = "You selected the flag of \(countries[number]) \n Your score is \(score) out of \(flagsAsked)"
         }
         showingScore = true
     }
