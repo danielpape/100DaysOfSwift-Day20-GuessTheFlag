@@ -7,6 +7,22 @@
 
 import SwiftUI
 
+struct FlagStyle: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .clipShape(Capsule())
+            .overlay(Capsule().stroke(Color.black,lineWidth: 1.0))
+            .shadow(color: Color.black, radius: 2)
+    }
+}
+
+extension View {
+    func flag() -> some View {
+        self.modifier(FlagStyle())
+    }
+}
+
+
 struct ContentView: View {
     
     @State private var countries = ["Estonia","France","Germany","Ireland","Italy","Nigeria","Poland","Russia","Spain","US","UK"].shuffled()
@@ -39,10 +55,7 @@ struct ContentView: View {
                             self.flagTapped(number)
                         }) {
                             Image(self.countries[number])
-                                .renderingMode(.original)
-                                .clipShape(Capsule())
-                                .overlay(Capsule().stroke(Color.black,lineWidth: 1.0))
-                                .shadow(color: .black, radius: 2)
+                                .flag()
                         }
                     }
                 }
